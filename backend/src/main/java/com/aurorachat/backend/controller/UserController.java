@@ -1,6 +1,6 @@
 package com.aurorachat.backend.controller;
 
-import com.aurorachat.backend.dto.UserRegisterRequest;
+import com.aurorachat.backend.dto.RegisterDto;
 import com.aurorachat.backend.model.User;
 import com.aurorachat.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class UserController {
 
     // 회원가입
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody UserRegisterRequest request) {
+    public ResponseEntity<User> register(@RequestBody RegisterDto request) {
         User user = userService.registerUser(
                 request.getUsername(),
                 request.getPassword(),

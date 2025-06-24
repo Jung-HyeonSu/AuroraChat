@@ -6,6 +6,7 @@ import com.aurorachat.backend.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -21,10 +22,14 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public String authenticateAndGetToken(String username, String password) {
+    // User 반환
+    public Optional<User> authenticateAndGetUser(String username, String password) {
         return userRepository.findByUsername(username)
-                .filter(user -> passwordEncoder.matches(password, user.getPassword()))
-                .map(user -> jwtUtil.generateToken(username))
-                .orElse(null);
+                .filter(user -> passwordEncoder.matches(password, user.getPassword()));
+    }
+
+    // 토큰 생성
+    public String generateToken(String username) {
+        return jwtUtil.generateToken(username);
     }
 }
