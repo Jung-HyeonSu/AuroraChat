@@ -12,11 +12,15 @@ function Login() {
         e.preventDefault();
         setError("");
         try {
-            await axiosInstance.post(
-                "/api/auth/login",
-                { username, password }
-            );
-            navigate("/");
+            const res = await axiosInstance.post("/api/auth/login", { username, password });
+            const token = res.data.token;
+            if (token) {
+                localStorage.setItem("jwt_token", token);
+                window.dispatchEvent(new Event("loginStatusChanged"));
+                navigate("/");
+            } else {
+                setError("이메일 또는 비밀번호가 올바르지 않습니다.");
+            }
         } catch (_err) {
             setError("이메일 또는 비밀번호가 올바르지 않습니다.");
         }
