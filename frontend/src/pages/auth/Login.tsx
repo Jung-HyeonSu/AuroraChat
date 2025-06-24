@@ -14,8 +14,10 @@ function Login() {
         try {
             const res = await axiosInstance.post("/api/auth/login", { username, password });
             const token = res.data.token;
+            const nickname = res.data.nickname;
             if (token) {
                 localStorage.setItem("jwt_token", token);
+                localStorage.setItem("nickname", nickname);
                 window.dispatchEvent(new Event("loginStatusChanged"));
                 navigate("/");
             } else {
