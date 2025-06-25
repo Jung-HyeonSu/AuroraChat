@@ -30,8 +30,6 @@
 ## 3. 간단한 아키텍처 흐름 (텍스트 다이어그램)
 
 ```
-csharp
-복사편집
 [React Frontend]
    |  HTTP REST API 요청 (회원가입, 로그인, 채팅 기록 조회 등)
    |  WebSocket 연결 (실시간 메시지 송수신)
