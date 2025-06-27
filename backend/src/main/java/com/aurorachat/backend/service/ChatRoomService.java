@@ -1,29 +1,44 @@
 package com.aurorachat.backend.service;
 
 import com.aurorachat.backend.model.ChatRoom;
+import com.aurorachat.backend.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class ChatRoomService {
-    private static final String CHAT_ROOMS_KEY = "CHAT_ROOM";
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final ChatRoomRepository chatRoomRepository;
 
-    public ChatRoom createRoom(String name) {
-        String roomId = UUID.randomUUID().toString();
-        ChatRoom room = new ChatRoom(roomId, name);
-        redisTemplate.opsForHash().put(CHAT_ROOMS_KEY, roomId, room);
-        return room;
+    private static final String CHAR_POOL = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private static final SecureRandom random = new SecureRandom();
+
+    private String generateRoomId() {
+        StringBuilder sb = new StringBuilder(6);
+        for (int i = 0; i < 6; i++) {
+            int idx = random.nextInt(CHAR_POOL.length());
+            sb.append(CHAR_POOL.charAt(idx));
+        }
+        return sb.toString();
     }
-    public ArrayList<Object> findAllRoom() {
-        return new ArrayList<>(redisTemplate.opsForHash().values(CHAT_ROOMS_KEY));
+    public ChatRoom createRoom(String roomName, String ownerName) {
+        String roomId;
+        do {
+            roomId = generateRoomId();
+        } while (chatRoomRepository.existsByRoomId(roomId));
+
+        ChatRoom chatRoom = new ChatRoom(roomId, roomName, ownerName, LocalDateTime.now(), "", LocalDateTime.now());
+
+        return chatRoomRepository.save(chatRoom);
+    }
+    public List<ChatRoom> findAllRoom() {
+        return chatRoomRepository.findAll();
     }
     public ChatRoom findRoomById(String roomId) {
-        return (ChatRoom) redisTemplate.opsForHash().get(CHAT_ROOMS_KEY, roomId);
+        return chatRoomRepository.findById(roomId).orElse(null);
     }
 }

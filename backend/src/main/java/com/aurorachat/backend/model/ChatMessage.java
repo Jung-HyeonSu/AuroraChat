@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-// 역할: 채팅 메시지 JPA Entity 및 DTO 변환 메서드
 public class ChatMessage {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
