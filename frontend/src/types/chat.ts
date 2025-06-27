@@ -1,7 +1,8 @@
 export interface ChatRoom {
-    id: string;
-    name: string;
-    avatarUrl: string;
+    roomId: string;
+    roomName: string;
+    ownerName: string;
+    createdAt: string;
     lastMessage: string;
     lastMessageTime: string;
 }

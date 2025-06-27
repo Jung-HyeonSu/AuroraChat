@@ -1,4 +1,4 @@
-import React, { useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import type { ChatRoom, ChatMessage } from "../../types/chat";
 
 interface Props {
@@ -28,7 +28,7 @@ const ChatRoomSection: React.FC<Props> = ({
             {/* 상단 */}
             <header className="h-20 border-b border-gray-100 flex items-center px-10 bg-white">
                 <img src={room.avatarUrl} className="w-10 h-10 rounded-full mr-4" alt="avatar" />
-                <span className="font-bold text-xl">{room.name}</span>
+                <span className="font-bold text-xl">{room.roomName}</span>
             </header>
             {/* 메시지 영역 */}
             <div className="flex-1 overflow-y-auto px-12 py-10 space-y-6">
@@ -70,8 +70,8 @@ const ChatRoomSection: React.FC<Props> = ({
                     className="flex-1 rounded-2xl border border-gray-300 px-5 py-3 mr-3 focus:outline-yellow-300"
                     placeholder="메시지를 입력하세요"
                     value={input}
-                    onChange={e => setInput(e.target.value)}
-                    onKeyDown={e => {
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => {
                         if (e.key === "Enter" && !e.shiftKey) {
                             handleSubmit(e as any);
                         }
