@@ -1,13 +1,15 @@
 import { useState } from "react";
 import type { ChatRoom } from "../../types/chat";
-import CreateRoomModal from "./CreateRoomModal"; // CreateRoomModal 별도 파일로 분리했다고 가정
-import formatRelativeTime from "../../utils/formatRelativeTime"; // 시간 포맷 유틸 함수 별도 분리 권장
+import CreateRoomModal from "./CreateRoomModal";
+import JoinRoomModal from "./JoinRoomModal"; // 새로 추가된 JoinRoomModal
+import formatRelativeTime from "../../utils/formatRelativeTime";
 
 interface Props {
     rooms: ChatRoom[];
     selectedRoom: ChatRoom | null;
     onSelectRoom: (room: ChatRoom) => void;
     onCreateRoom: (room: ChatRoom) => void;
+    onJoinRoom: (roomId: string) => void; // 채팅방 참여 핸들러
     className?: string;
 }
 
@@ -16,9 +18,11 @@ const ChatSidebar: React.FC<Props> = ({
                                           selectedRoom,
                                           onSelectRoom,
                                           onCreateRoom,
+                                          onJoinRoom,
                                           className = "",
                                       }) => {
-    const [modalOpen, setModalOpen] = useState(false);
+    const [createModalOpen, setCreateModalOpen] = useState(false);
+    const [joinModalOpen, setJoinModalOpen] = useState(false);
 
     return (
         <aside
@@ -29,9 +33,16 @@ const ChatSidebar: React.FC<Props> = ({
                 <button
                     className="ml-2 w-9 h-9 rounded-full bg-yellow-300 hover:bg-yellow-400 transition flex items-center justify-center text-2xl font-bold"
                     aria-label="채팅방 추가"
-                    onClick={() => setModalOpen(true)}
+                    onClick={() => setCreateModalOpen(true)}
                 >
                     +
+                </button>
+                <button
+                    className="ml-2 w-9 h-9 rounded-full bg-blue-300 hover:bg-blue-400 transition flex items-center justify-center text-xl font-bold"
+                    aria-label="채팅방 참여"
+                    onClick={() => setJoinModalOpen(true)}
+                >
+                    ▶
                 </button>
             </div>
             <ul className="flex-1 space-y-4 overflow-y-auto pr-2">
@@ -58,12 +69,22 @@ const ChatSidebar: React.FC<Props> = ({
                     </li>
                 ))}
             </ul>
+            {/* 채팅방 생성 모달 */}
             <CreateRoomModal
-                open={modalOpen}
-                onClose={() => setModalOpen(false)}
+                open={createModalOpen}
+                onClose={() => setCreateModalOpen(false)}
                 onCreate={(room) => {
                     onCreateRoom(room);
-                    setModalOpen(false);
+                    setCreateModalOpen(false);
+                }}
+            />
+            {/* 채팅방 참여 모달 */}
+            <JoinRoomModal
+                open={joinModalOpen}
+                onClose={() => setJoinModalOpen(false)}
+                onJoin={(roomId) => {
+                    onJoinRoom(roomId);
+                    setJoinModalOpen(false);
                 }}
             />
         </aside>
