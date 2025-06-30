@@ -1,5 +1,6 @@
 package com.aurorachat.backend.service;
 
+import com.aurorachat.backend.dto.ChatRoomMemberDto;
 import com.aurorachat.backend.model.ChatRoom;
 import com.aurorachat.backend.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
@@ -7,12 +8,13 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatRoomMemberService chatRoomMemberService; // ChatRoomMemberService 주입
 
     private static final String CHAR_POOL = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private static final SecureRandom random = new SecureRandom();
@@ -25,6 +27,7 @@ public class ChatRoomService {
         }
         return sb.toString();
     }
+
     public ChatRoom createRoom(String roomName, String ownerName) {
         String roomId;
         do {
@@ -32,12 +35,22 @@ public class ChatRoomService {
         } while (chatRoomRepository.existsByRoomId(roomId));
 
         ChatRoom chatRoom = new ChatRoom(roomId, roomName, ownerName, LocalDateTime.now(), "", LocalDateTime.now());
+        chatRoomRepository.save(chatRoom);
 
-        return chatRoomRepository.save(chatRoom);
+        ChatRoomMemberDto ownerMemberDto = new ChatRoomMemberDto(null,
+                roomId,
+                ownerName,
+                LocalDateTime.now(),
+                "admin");
+        chatRoomMemberService.addMemberToRoom(ownerMemberDto);
+
+        return chatRoom;
     }
+
     public List<ChatRoom> findAllRoom() {
         return chatRoomRepository.findAll();
     }
+
     public ChatRoom findRoomById(String roomId) {
         return chatRoomRepository.findById(roomId).orElse(null);
     }
