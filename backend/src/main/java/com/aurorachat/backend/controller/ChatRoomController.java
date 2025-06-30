@@ -39,9 +39,9 @@ public class ChatRoomController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/rooms")
-    public List<ChatRoomDto> findAllRoom() {
-        List<ChatRoom> rooms = chatRoomService.findAllRoom();
+    @GetMapping("/rooms/{nickname}")
+    public List<ChatRoomDto> findRoomsByUser(@PathVariable String nickname) {
+        List<ChatRoom> rooms = chatRoomService.findRoomsByUser(nickname);
         if (rooms == null) {
             return Collections.emptyList();
         }
