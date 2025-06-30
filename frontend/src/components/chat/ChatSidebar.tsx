@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { ChatRoom } from "../../types/chat";
 import CreateRoomModal from "./CreateRoomModal";
-import JoinRoomModal from "./JoinRoomModal"; // 새로 추가된 JoinRoomModal
+import JoinRoomModal from "./JoinRoomModal";
 import formatRelativeTime from "../../utils/formatRelativeTime";
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
     selectedRoom: ChatRoom | null;
     onSelectRoom: (room: ChatRoom) => void;
     onCreateRoom: (room: ChatRoom) => void;
-    onJoinRoom: (roomId: string) => void; // 채팅방 참여 핸들러
+    onJoinRoom: (roomId: string) => void; // 문자열 roomId로 변경
     className?: string;
 }
 

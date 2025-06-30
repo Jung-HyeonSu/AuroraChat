@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import axiosInstance from "../../api/axiosInstance.ts";
+import axiosInstance from "../../api/axiosInstance";
 
 interface JoinRoomModalProps {
     open: boolean;
     onClose: () => void;
-    onJoin: (room: { roomId: string }) => void;
+    onJoin: (roomId: string) => void; // 문자열 roomId로 통일
 }
 
 const JoinRoomModal: React.FC<JoinRoomModalProps> = ({ open, onClose, onJoin }) => {
@@ -17,7 +17,7 @@ const JoinRoomModal: React.FC<JoinRoomModalProps> = ({ open, onClose, onJoin }) 
             setNickname(storedNickname);
         } else {
             alert("닉네임이 설정되지 않았습니다. 먼저 닉네임을 설정해주세요.");
-            onClose(); // 닉네임이 없으면 모달 닫기
+            onClose();
         }
     }, [onClose]);
 
@@ -31,12 +31,13 @@ const JoinRoomModal: React.FC<JoinRoomModalProps> = ({ open, onClose, onJoin }) 
             const response = await axiosInstance.post("/api/chat-room-members/join", {
                 roomId,
                 nickname,
-                role: "member", // 기본 role 설정
+                role: "member",
             });
 
             if (response.data) {
                 alert("채팅방에 참여했습니다.");
                 setRoomId("");
+                onJoin(roomId); // 문자열 roomId 전달
                 onClose();
             } else {
                 alert("참여 중 문제가 발생했습니다.");
