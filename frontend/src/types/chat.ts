@@ -10,7 +10,8 @@ export interface ChatRoom {
 export interface ChatMessage {
     id: string;
     roomId: string;
+    sender: string;
     content: string;
-    time: string;
-    isMine: boolean;
+    timestamp: string;
+    isMine?: boolean; // 선택적
 }
