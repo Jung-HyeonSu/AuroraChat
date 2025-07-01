@@ -3,6 +3,7 @@ import ChatRoomSection from "../components/chat/ChatRoomSection";
 import type { ChatRoom, ChatMessage } from "../types/chat";
 import { useState, useEffect } from "react";
 import axiosInstance from "../api/axiosInstance";
+import {Client} from "@stomp/stompjs";
 
 const BG_GRAY = "bg-[#f5f6fa]";
 
@@ -35,20 +36,26 @@ function Home() {
 
     // 선택된 방 메시지 불러오기
     useEffect(() => {
-        if (!selectedRoom) return;
+        if (!selectedRoom) return; // selectedRoom 없으면 구독 안 함
 
-        const fetchMessages = async () => {
-            try {
-                const res = await axiosInstance.get<ChatMessage[]>(
-                    `/api/chat/messages?roomId=${selectedRoom.roomId}`
-                );
-                setMessages(res.data);
-            } catch (error) {
-                console.error("채팅방 메시지 불러오기 실패", error);
-            }
+        const client = new Client({
+            brokerURL: import.meta.env.REACT_APP_WS_URL,
+        });
+
+        client.onConnect = () => {
+            client.subscribe(`/topic/chat/${selectedRoom.roomId}`, (message) => {
+                const body = JSON.parse(message.body);
+                setMessages((prev) => [...prev, body]);
+            });
         };
-        fetchMessages();
+
+        client.activate();
+
+        return () => {
+            client.deactivate();
+        };
     }, [selectedRoom]);
+
 
     // 새 방 생성 시 처리
     const handleRoomCreated = (room: ChatRoom) => {
