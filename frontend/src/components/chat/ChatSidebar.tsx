@@ -55,7 +55,7 @@ const ChatSidebar: React.FC<Props> = ({
                         onClick={() => onSelectRoom(room)}
                     >
                         <img
-                            src={room.avatarUrl}
+                            src="/images/default_profile.jpg"
                             alt="avatar"
                             className="w-10 h-10 rounded-full mr-4"
                         />

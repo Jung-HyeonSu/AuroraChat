@@ -13,5 +13,4 @@ export interface ChatMessage {
     content: string;
     time: string;
     isMine: boolean;
-    avatarUrl?: string;
 }

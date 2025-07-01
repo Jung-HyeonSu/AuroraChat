@@ -27,7 +27,7 @@ const ChatRoomSection: React.FC<Props> = ({
         <section className={`flex flex-col flex-1 bg-[#f7f8fa] ${className}`}>
             {/* 상단 */}
             <header className="h-20 border-b border-gray-100 flex items-center px-10 bg-white">
-                <img src={room.avatarUrl} className="w-10 h-10 rounded-full mr-4" alt="avatar" />
+                <img src="/images/default_profile.jpg" className="w-10 h-10 rounded-full mr-4" alt="avatar" />
                 <span className="font-bold text-xl">{room.roomName}</span>
             </header>
             {/* 메시지 영역 */}
@@ -41,7 +41,7 @@ const ChatRoomSection: React.FC<Props> = ({
                     >
                         {!msg.isMine && (
                             <img
-                                src={msg.avatarUrl}
+                                src="/images/default_profile.jpg"
                                 className="w-8 h-8 rounded-full mr-3"
                                 alt="avatar"
                             />
