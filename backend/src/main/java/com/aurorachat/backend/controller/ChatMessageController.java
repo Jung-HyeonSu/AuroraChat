@@ -15,18 +15,6 @@ public class ChatMessageController {
 
     private final ChatMessageService chatMessageService;
 
-    @PostMapping
-    public ResponseEntity<Void> saveMessage(@RequestBody ChatMessageDto messageDto) {
-        try {
-            chatMessageService.saveMessageToMongoDB(messageDto);
-            chatMessageService.saveMessageToRedis(messageDto);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).build();
-        }
-    }
-
     @GetMapping("/{roomId}")
     public ResponseEntity<List<ChatMessageDto>> getMessages(@PathVariable String roomId) {
         try {

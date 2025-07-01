@@ -41,6 +41,8 @@ public class SecurityConfig {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/**", configuration);
+        source.registerCorsConfiguration("/ws-stomp/**", configuration);
+        source.registerCorsConfiguration("/chat/message/**", configuration);
         return source;
     }
 }
