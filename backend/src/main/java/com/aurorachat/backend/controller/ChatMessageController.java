@@ -1,25 +1,41 @@
 package com.aurorachat.backend.controller;
 
 import com.aurorachat.backend.dto.ChatMessageDto;
+import com.aurorachat.backend.service.ChatMessageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.stereotype.Controller;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/chat/messages")
 @RequiredArgsConstructor
 public class ChatMessageController {
-    private final StringRedisTemplate redisTemplate;
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @MessageMapping("/chat/message")
-    public void message(ChatMessageDto message) {
+    private final ChatMessageService chatMessageService;
+
+    @PostMapping
+    public ResponseEntity<Void> saveMessage(@RequestBody ChatMessageDto messageDto) {
         try {
-            String json = objectMapper.writeValueAsString(message);
-            redisTemplate.convertAndSend("chatroom." + message.getRoomId(), json);
+            chatMessageService.saveMessageToMongoDB(messageDto);
+            chatMessageService.saveMessageToRedis(messageDto);
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
             e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
+
+    @GetMapping("/{roomId}")
+    public ResponseEntity<List<ChatMessageDto>> getMessages(@PathVariable String roomId) {
+        try {
+            // 전체 메시지 조회 (7일 이전은 몽고, 이후는 레디스)
+            List<ChatMessageDto> messages = chatMessageService.getAllMessages(roomId);
+            return ResponseEntity.ok(messages);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
         }
     }
 }

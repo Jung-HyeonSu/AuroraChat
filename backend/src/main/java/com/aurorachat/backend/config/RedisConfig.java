@@ -1,41 +1,56 @@
 package com.aurorachat.backend.config;
 
-import com.aurorachat.backend.service.RedisSubscriber;
-import lombok.RequiredArgsConstructor;
+import com.aurorachat.backend.dto.ChatMessageDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 
 @Configuration
-@RequiredArgsConstructor
 public class RedisConfig {
-    private final RedisSubscriber redisSubscriber;
 
     @Bean
-    public RedisMessageListenerContainer redisContainer(RedisConnectionFactory connectionFactory) {
+    public RedisMessageListenerContainer redisContainer(RedisConnectionFactory connectionFactory, ApplicationContext ctx) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        // 모든 채팅방 채널 구독 (패턴 기반)
-        container.addMessageListener(redisSubscriber, new ChannelTopic("__keyevent@*__:expired")); // 예시
-        // 실제 사용시에는 아래처럼 동적으로 topic 바인딩 필요
-        // container.addMessageListener(redisSubscriber, new PatternTopic("chatroom.*"));
+        container.addMessageListener(
+                ctx.getBean("redisSubscriber", org.springframework.data.redis.connection.MessageListener.class),
+                new PatternTopic("chatroom.*"));
         return container;
     }
 
-    // ★ RedisTemplate Bean 등록!
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
+    public RedisTemplate<String, ChatMessageDto> redisTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, ChatMessageDto> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
+
+        // key serializer
         template.setKeySerializer(new StringRedisSerializer());
         template.setHashKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-        template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+
+        // value serializer
+        Jackson2JsonRedisSerializer<ChatMessageDto> serializer = new Jackson2JsonRedisSerializer<>(ChatMessageDto.class);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule()); // Instant 지원
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        // 필요하면 타입 정보 포함 (defaultTyping)
+        // objectMapper.activateDefaultTyping(...); // 최신 Jackson에서는 deprecated
+
+        serializer.setObjectMapper(objectMapper);
+
+        template.setValueSerializer(serializer);
+        template.setHashValueSerializer(serializer);
+
+        template.afterPropertiesSet();
         return template;
     }
 }
