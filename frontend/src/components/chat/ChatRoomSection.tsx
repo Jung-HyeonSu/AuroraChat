@@ -20,15 +20,18 @@ const ChatRoomSection: React.FC<Props> = ({
     const [input, setInput] = useState("");
     const [currentUserName, setCurrentUserName] = useState<string>("");
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
+    const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         const nickname = localStorage.getItem("nickname") || "익명";
         setCurrentUserName(nickname);
     }, []);
 
-    // 스크롤을 가장 아래로 이동
+    // 내부 메시지 영역 스크롤을 맨 아래로 내림
     useEffect(() => {
-        (messagesEndRef.current as HTMLDivElement)?.scrollIntoView();
+        if (messagesContainerRef.current) {
+            messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+        }
     }, [messages]);
 
     const handleSendMessage = (content: string) => {
@@ -82,10 +85,16 @@ const ChatRoomSection: React.FC<Props> = ({
                     className="w-10 h-10 rounded-full mr-4"
                     alt="avatar"
                 />
-                <span className="font-bold text-xl">{room.roomName}</span>
+                <span className="font-bold text-xl me-2">{room.roomName}</span>
+                <span className="text-sm text-gray-600 ml-auto font-semibold tracking-wide whitespace-nowrap">
+                    참여코드 - {room.roomId}
+                </span>
             </header>
 
-            <div className="flex-1 overflow-y-auto px-12 py-10 space-y-6">
+            <div
+                ref={messagesContainerRef}
+                className="flex-1 overflow-y-auto px-12 py-10 space-y-6"
+            >
                 {messages.map((msg) => {
                     const mine = msg.sender === currentUserName;
                     return (
@@ -124,6 +133,7 @@ const ChatRoomSection: React.FC<Props> = ({
                 })}
                 <div ref={messagesEndRef} />
             </div>
+
             <form
                 className="flex items-center p-8 border-t border-gray-100 bg-white"
                 onSubmit={handleSubmit}

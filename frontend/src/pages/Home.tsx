@@ -25,7 +25,7 @@ function Home() {
             const res = await axiosInstance.get<ChatRoom[]>(`/api/chat/rooms/${nickname}`);
             setRooms(res.data);
             if (res.data.length > 0) {
-                setSelectedRoom(prev => prev ?? res.data[0]);
+                setSelectedRoom((prev) => prev ?? res.data[0]);
             }
         } catch (error) {
             console.error("채팅방 목록 불러오기 실패", error);
@@ -71,12 +71,12 @@ function Home() {
                 console.log("WebSocket 연결 성공 (Home.tsx)");
                 client.subscribe(`/sub/chatroom/${selectedRoom.roomId}`, (message) => {
                     const newMessage: ChatMessage = JSON.parse(message.body);
-                    setMessages(prev => [...prev, newMessage]);
+                    setMessages((prev) => [...prev, newMessage]);
                 });
             },
             onStompError: (frame) => {
                 console.error("STOMP 에러:", frame);
-            }
+            },
         });
 
         client.activate();
@@ -95,7 +95,7 @@ function Home() {
 
     // 새 방 생성 시 처리
     const handleRoomCreated = (room: ChatRoom) => {
-        setRooms(prev => [room, ...prev]);
+        setRooms((prev) => [room, ...prev]);
         setSelectedRoom(room);
     };
 
@@ -108,7 +108,7 @@ function Home() {
             const res = await axiosInstance.get<ChatRoom[]>(`/api/chat/rooms/${nickname}`);
             setRooms(res.data);
 
-            const joinedRoom = res.data.find(r => r.roomId === roomId);
+            const joinedRoom = res.data.find((r) => r.roomId === roomId);
             if (joinedRoom) {
                 setSelectedRoom(joinedRoom);
             }
@@ -117,29 +117,28 @@ function Home() {
         }
     };
 
-
     // 자식 컴포넌트에서 메시지 전송 후 부모 상태도 업데이트할 때 사용
     const handleSendMessage = (message: ChatMessage) => {
-        setMessages(prev => [...prev, message]);
+        setMessages((prev) => [...prev, message]);
     };
 
     return (
         <div className={`${BG_GRAY} min-h-screen w-full py-12 flex flex-col items-center`}>
-            <div className="flex w-[1200px] h-[700px] rounded-3xl shadow-xl overflow-hidden bg-white/0">
+            <div className="flex flex-col md:flex-row w-full max-w-[1200px] h-[700px] max-h-[90vh] rounded-3xl shadow-xl overflow-hidden bg-white/0">
                 <ChatSidebar
                     rooms={rooms}
                     selectedRoom={selectedRoom}
                     onSelectRoom={setSelectedRoom}
                     onCreateRoom={handleRoomCreated}
                     onJoinRoom={handleJoinRoom}
-                    className="rounded-l-3xl"
+                    className="rounded-l-3xl w-full md:w-1/3 h-48 md:h-auto"
                 />
                 {selectedRoom ? (
                     <ChatRoomSection
                         room={selectedRoom}
                         messages={messages}
                         onSendMessage={handleSendMessage}
-                        className="rounded-r-3xl"
+                        className="rounded-r-3xl w-full md:w-2/3 flex-1"
                         stompClient={clientRef.current}
                     />
                 ) : (
