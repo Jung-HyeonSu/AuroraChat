@@ -85,16 +85,19 @@ const ChatRoomSection: React.FC<Props> = ({
                     return (
                         <div
                             key={msg.id}
-                            className={`flex items-end ${
-                                mine ? "justify-end" : "justify-start"
-                            }`}
+                            className={`flex items-end ${mine ? "justify-end" : "justify-start"}`}
                         >
                             {!mine && (
-                                <img
-                                    src="/images/default_profile.jpg"
-                                    className="w-8 h-8 rounded-full mr-3"
-                                    alt="avatar"
-                                />
+                                <div className="relative mr-3">
+                                    <span className="font-bold absolute bottom-10 left-1/2 transform -translate-x-1/2 text-sm text-gray-600 whitespace-nowrap">
+                                        {msg.sender}
+                                    </span>
+                                    <img
+                                        src="/images/default_profile.jpg"
+                                        className="w-8 h-8 rounded-full"
+                                        alt="avatar"
+                                    />
+                                </div>
                             )}
                             <div
                                 className={`px-5 py-3 max-w-xs break-words shadow ${
@@ -112,7 +115,6 @@ const ChatRoomSection: React.FC<Props> = ({
                     );
                 })}
             </div>
-
             <form
                 className="flex items-center p-8 border-t border-gray-100 bg-white"
                 onSubmit={handleSubmit}
