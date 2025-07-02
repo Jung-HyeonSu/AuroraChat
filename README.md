@@ -7,8 +7,9 @@
 | 백엔드 | Spring Boot 3.x | REST API 및 WebSocket 서버 구현 |
 | 실시간 통신 | Spring WebSocket + STOMP / SockJS | WebSocket 프로토콜 지원 |
 | 인증 | Spring Security + JWT | 토큰 기반 인증 |
-| 데이터베이스 | MySQL | 채팅 기록 및 유저 정보 저장 |
-| 캐시 | Redis | 세션 관리 및 메시지 큐 (옵션) |
+| 관계형 데이터베이스 | MySQL | 유저 정보 저장 및 채팅방 정보 |
+| 비관계형 데이터베이스 | MongoDB | 채팅 기록 |
+| 캐시 | Redis | 7일 이내 채팅 |
 | 프론트엔드 | React 18.x + TypeScript | UI 개발 |
 | 상태관리 | Redux Toolkit / React Query | 상태관리 및 서버 상태 동기화 |
 | 실시간 통신 | socket.io-client (React) | WebSocket 클라이언트 |
