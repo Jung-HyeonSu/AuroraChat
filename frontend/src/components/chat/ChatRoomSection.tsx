@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ChatRoom, ChatMessage } from "../../types/chat";
 import type { Client } from "@stomp/stompjs";
 
@@ -19,11 +19,17 @@ const ChatRoomSection: React.FC<Props> = ({
                                           }) => {
     const [input, setInput] = useState("");
     const [currentUserName, setCurrentUserName] = useState<string>("");
+    const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         const nickname = localStorage.getItem("nickname") || "익명";
         setCurrentUserName(nickname);
     }, []);
+
+    // 스크롤을 가장 아래로 이동
+    useEffect(() => {
+        (messagesEndRef.current as HTMLDivElement)?.scrollIntoView();
+    }, [messages]);
 
     const handleSendMessage = (content: string) => {
         if (!currentUserName) {
@@ -85,7 +91,9 @@ const ChatRoomSection: React.FC<Props> = ({
                     return (
                         <div
                             key={msg.id}
-                            className={`flex items-end ${mine ? "justify-end" : "justify-start"}`}
+                            className={`flex items-end ${
+                                mine ? "justify-end" : "justify-start"
+                            }`}
                         >
                             {!mine && (
                                 <div className="relative mr-3">
@@ -114,6 +122,7 @@ const ChatRoomSection: React.FC<Props> = ({
                         </div>
                     );
                 })}
+                <div ref={messagesEndRef} />
             </div>
             <form
                 className="flex items-center p-8 border-t border-gray-100 bg-white"
