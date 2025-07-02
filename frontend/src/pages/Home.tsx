@@ -19,7 +19,6 @@ function Home() {
         try {
             const nickname = localStorage.getItem("nickname");
             if (!nickname) {
-                alert("닉네임이 설정되지 않았습니다.");
                 return;
             }
             const res = await axiosInstance.get<ChatRoom[]>(`/api/chat/rooms/${nickname}`);

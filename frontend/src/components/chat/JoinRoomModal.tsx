@@ -16,7 +16,6 @@ const JoinRoomModal: React.FC<JoinRoomModalProps> = ({ open, onClose, onJoin }) 
         if (storedNickname) {
             setNickname(storedNickname);
         } else {
-            alert("닉네임이 설정되지 않았습니다. 먼저 닉네임을 설정해주세요.");
             onClose();
         }
     }, [onClose]);
