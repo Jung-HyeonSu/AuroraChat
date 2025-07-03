@@ -5,8 +5,9 @@ export default defineConfig({
     global: 'window',
   },
   server: {
+    host: true,
     proxy: {
-      '/api': 'http://localhost:8080',
+      '/api': 'http://172.30.1.59:8080',
     },
   },
 });
