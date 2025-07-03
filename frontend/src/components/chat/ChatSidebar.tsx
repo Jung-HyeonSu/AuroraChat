@@ -31,19 +31,21 @@ const ChatSidebar: React.FC<Props> = ({
             <div className="flex items-center mb-8">
                 <h2 className="text-2xl font-bold flex-1">채팅</h2>
                 <button
-                    className="ml-2 w-9 h-9 rounded-full bg-yellow-300 hover:bg-yellow-400 transition flex items-center justify-center text-2xl font-bold"
+                    className="ml-2 w-10 h-10 rounded-full bg-sky-400 hover:bg-sky-500 transition-all duration-200 transform hover:scale-105 flex items-center justify-center text-white text-2xl font-bold shadow-md leading-none"
                     aria-label="채팅방 추가"
                     onClick={() => setCreateModalOpen(true)}
                 >
                     +
                 </button>
+
                 <button
-                    className="ml-2 w-9 h-9 rounded-full bg-blue-300 hover:bg-blue-400 transition flex items-center justify-center text-xl font-bold"
+                    className="ml-2 w-10 h-10 rounded-full bg-sky-400 hover:bg-sky-500 transition-all duration-200 transform hover:scale-105 flex items-center justify-center text-white text-xl font-bold shadow-md leading-none"
                     aria-label="채팅방 참여"
                     onClick={() => setJoinModalOpen(true)}
                 >
                     ▶
                 </button>
+
             </div>
             <ul className="flex-1 space-y-4 overflow-y-auto pr-2">
                 {rooms.map((room) => (

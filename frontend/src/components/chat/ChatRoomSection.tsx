@@ -14,7 +14,6 @@ const ChatRoomSection: React.FC<Props> = ({
                                               room,
                                               messages,
                                               className = "",
-                                              onSendMessage,
                                               stompClient,
                                           }) => {
     const [input, setInput] = useState("");
@@ -145,13 +144,13 @@ const ChatRoomSection: React.FC<Props> = ({
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => {
                         if (e.key === "Enter" && !e.shiftKey) {
-                            handleSubmit(e as any);
+                            e.preventDefault();
                         }
                     }}
                 />
                 <button
                     type="submit"
-                    className="bg-yellow-300 hover:bg-yellow-400 text-gray-800 font-bold rounded-xl px-6 py-3"
+                    className="bg-gradient-to-r from-indigo-400 via-blue-500 to-purple-500 hover:from-indigo-500 hover:to-purple-600 text-white font-semibold rounded-full px-6 py-3 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
                 >
                     전송
                 </button>
