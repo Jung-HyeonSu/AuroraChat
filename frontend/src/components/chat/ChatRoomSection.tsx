@@ -118,7 +118,7 @@ const ChatRoomSection: React.FC<Props> = ({
                             <div
                                 className={`px-5 py-3 max-w-xs break-words shadow ${
                                     mine
-                                        ? "bg-yellow-200 text-right text-gray-800 rounded-3xl rounded-br-md"
+                                        ? "bg-blue-200 text-right text-gray-800 rounded-3xl rounded-br-md"
                                         : "bg-white text-left text-gray-800 rounded-3xl rounded-bl-md"
                                 }`}
                             >
