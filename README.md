@@ -15,7 +15,6 @@
 | 실시간 통신 | socket.io-client (React) | WebSocket 클라이언트 |
 | 스타일링 | Tailwind CSS / MUI(Material UI) | UI 스타일링 |
 | 빌드 도구 | Gradle (백엔드), Vite / Webpack (프론트엔드) | 프로젝트 빌드 및 관리 |
-| 배포 | Docker + AWS/GCP/Azure / Netlify (프론트) | 컨테이너화 및 클라우드 배포 |
 
 ## 2. 기능 설계
 
