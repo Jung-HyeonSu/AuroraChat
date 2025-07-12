@@ -11,7 +11,6 @@
 | 비관계형 데이터베이스 | MongoDB | 채팅 기록 |
 | 캐시 | Redis | 7일 이내 채팅 |
 | 프론트엔드 | React 18.x + TypeScript | UI 개발 |
-| 상태관리 | Redux Toolkit / React Query | 상태관리 및 서버 상태 동기화 |
 | 실시간 통신 | socket.io-client (React) | WebSocket 클라이언트 |
 | 스타일링 | Tailwind CSS / MUI(Material UI) | UI 스타일링 |
 | 빌드 도구 | Gradle (백엔드), Vite / Webpack (프론트엔드) | 프로젝트 빌드 및 관리 |
@@ -58,6 +57,5 @@
 - React + TypeScript 환경 구축
 - 로그인 시 JWT 토큰 저장 및 API 헤더에 포함
 - socket.io-client 혹은 STOMP 클라이언트 연결
-- Redux Toolkit으로 상태 관리 (유저 상태, 채팅방, 메시지 등)
 - Tailwind CSS/MUI로 반응형 UI 제작
 - 메시지 입력, 전송, 채팅 목록, 알림 UI 구현
