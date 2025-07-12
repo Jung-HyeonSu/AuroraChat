@@ -1,4 +1,4 @@
-# AuroraChat
+# AuroraChat <img width="40" height="40" alt="Image" src="https://github.com/user-attachments/assets/d69ec52c-4fc6-4d56-935a-b30d5c128493" />
 
 ## 1. 아키텍처 & 기술 스택
 
